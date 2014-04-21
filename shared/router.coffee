@@ -1,19 +1,19 @@
 Router.map ->
 
-  @route "entrySignIn",
-    path: "/sign-in"
+  @route 'entrySignIn',
+    path: '/sign-in'
     onBeforeAction: ->
       Session.set('entryError', undefined)
       Session.set('buttonText', 'in')
 
-  @route "entrySignUp",
-    path: "/sign-up"
+  @route 'entrySignUp',
+    path: '/sign-up'
     onBeforeAction: ->
       Session.set('entryError', undefined)
       Session.set('buttonText', 'up')
 
-  @route "entryForgotPassword",
-    path: "/forgot-password"
+  @route 'entryForgotPassword',
+    path: '/forgot-password'
     onBeforeAction: ->
       Session.set('entryError', undefined)
 

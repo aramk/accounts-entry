@@ -6,7 +6,12 @@ AccountsEntry =
     passwordSignupFields: 'EMAIL_ONLY'
     emailToLower: true
     usernameToLower: false
-    entrySignUp: '/sign-up'
+    entrySignUp: '/sign-up',
+    templates:
+      entrySignIn: 'entrySignIn',
+      entrySignUp: 'entrySignUp',
+      entryForgotPassword: 'entryForgotPassword',
+      entrySignOut: 'entrySignOut'
 
   isStringEmail: (email) ->
     emailPattern = /^([\w.-]+)@([\w.-]+)\.([a-zA-Z.]{2,6})$/i
@@ -21,8 +26,12 @@ AccountsEntry =
 
     templates = appConfig.templates
     if templates?
-      for name, template of templates
-        Router.routes[name]?.options.template = template
+      for oldName, newName of templates
+        route = Router.routes[oldName]
+        if route?
+          route.options.template = newName
+          Template[newName].helpers = Template[oldName].helpers
+          Template[newName].events = Template[oldName].events
 
   signInRequired: (router, extraCondition) ->
     extraCondition ?= true

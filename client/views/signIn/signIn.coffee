@@ -1,4 +1,7 @@
-Template.entrySignIn.helpers
+template = Template[AccountsEntry.settings.templates.entrySignIn];
+console.log AccountsEntry.settings.templates
+
+template.helpers
   emailInputType: ->
     if AccountsEntry.settings.passwordSignupFields is 'EMAIL_ONLY'
       'email'
@@ -24,7 +27,7 @@ Template.entrySignIn.helpers
   isUsernameOnly: ->
     return AccountsEntry.settings.passwordSignupFields == i18n("username")
 
-Template.entrySignIn.events
+template.events
   'submit #signIn': (event) ->
     event.preventDefault()
 
