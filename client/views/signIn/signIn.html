@@ -2,15 +2,15 @@
   <div class="container">
     <div class="row">
       {{#if logo}}
-        <div class="entry-logo">
-            <a href="/"><img src="{{logo}}" alt="logo"></a>
-        </div>
+      <div class="entry-logo">
+        <a href="/"><img src="{{logo}}" alt="logo"></a>
+      </div>
       {{/if}}
-      <div class="entry col-md-4 col-md-offset-4">
+      <div class="entry">
         {{#if otherLoginServices}}
         <div class="entry-social">
           {{#each loginServices}}
-            {{> entrySocial}}
+          {{> entrySocial}}
           {{/each}}
           {{#if passwordLoginService}}
           <div class="email-option">
@@ -21,25 +21,34 @@
         {{/if}}
         {{> entryError}}
         {{#unless otherLoginServices}}
-          <div class="email-option">
-            <h3>{{i18n "signIn"}}</h3>
-          </div>
+        <div class="email-option">
+          <h3>{{i18n "signIn"}}</h3>
+        </div>
         {{/unless}}
         {{#if passwordLoginService}}
-          <form class="entry-form" id='signIn'>
-            <div class="form-group">
-              <input autofocus name="email" type="{{emailInputType}}" class="form-control" value='{{email}}' placeholder="{{emailPlaceholder}}">
+        <form class="entry-form ui form segment" id='signIn'>
+          <div class="field">
+            <div class="ui input">
+              <input autofocus name="email" type="{{emailInputType}}"
+                     value='{{email}}' placeholder="{{emailPlaceholder}}">
             </div>
-            <div class="form-group">
-              <input name="password" type="password" class="form-control" value='{{password}}' placeholder="{{i18n 'password'}}">
+          </div>
+          <div class="field">
+            <div class="ui input">
+              <input name="password" type="password" value='{{password}}'
+                     placeholder="{{i18n 'password'}}">
             </div>
-            {{#unless isUsernameOnly}}
-              <p><a href="/forgot-password">{{i18n "forgotPassword"}}</a></p>
-              <button type="submit" class="submit btn btn-block btn-default">{{i18n "signIn"}}</button>
-            {{/unless}}
-          </form>
+          </div>
+          {{#unless isUsernameOnly}}
+          <p class="entry-forgot-password"><a href="/forgot-password">
+            {{i18n "forgotPassword"}}</a>
+          </p>
+          <button type="submit" class="ui button">{{i18n "signIn"}}</button>
+          {{/unless}}
+        </form>
         {{/if}}
-        <p class="entry-signup-cta">{{i18n "dontHaveAnAccount"}} <a href="/sign-up">{{i18n "signUp"}}</a></p>
+        <p class="entry-signup-cta">{{i18n "dontHaveAnAccount"}} <a href="/sign-up">
+          {{i18n"signUp"}}</a></p>
       </div>
     </div>
   </div>
