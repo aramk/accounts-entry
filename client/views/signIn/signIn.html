@@ -1,55 +1,49 @@
 <template name='entrySignIn'>
-  <div class="container">
-    <div class="row">
-      {{#if logo}}
-      <div class="entry-logo">
-        <a href="/"><img src="{{logo}}" alt="logo"></a>
+  <div class="entry">
+    {{#if logo}}
+    <a href="/" class="entry-logo"></a>
+    {{/if}}
+    {{#if otherLoginServices}}
+    <div class="entry-social">
+      {{#each loginServices}}
+      {{> entrySocial}}
+      {{/each}}
+      {{#if passwordLoginService}}
+      <div class="email-option">
+        <strong class="line-thru or-sign-in">{{i18n "OR"}}</strong>
       </div>
       {{/if}}
-      <div class="entry">
-        {{#if otherLoginServices}}
-        <div class="entry-social">
-          {{#each loginServices}}
-          {{> entrySocial}}
-          {{/each}}
-          {{#if passwordLoginService}}
-          <div class="email-option">
-            <strong class="line-thru or-sign-in">{{i18n "OR"}}</strong>
-          </div>
-          {{/if}}
-        </div>
-        {{/if}}
-        {{> entryError}}
-        {{#unless otherLoginServices}}
-        <div class="email-option">
-          <h3>{{i18n "signIn"}}</h3>
-        </div>
-        {{/unless}}
-        {{#if passwordLoginService}}
-        <form class="entry-form ui form segment" id='signIn'>
-          <div class="field">
-            <div class="ui input">
-              <input autofocus name="email" type="{{emailInputType}}"
-                     value='{{email}}' placeholder="{{emailPlaceholder}}">
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui input">
-              <input name="password" type="password" value='{{password}}'
-                     placeholder="{{i18n 'password'}}">
-            </div>
-          </div>
-          {{#unless isUsernameOnly}}
-          <p class="entry-forgot-password"><a href="/forgot-password">
-            {{i18n "forgotPassword"}}</a>
-          </p>
-          <button type="submit" class="ui button">{{i18n "signIn"}}</button>
-          {{/unless}}
-        </form>
-        {{/if}}
-        <p class="entry-signup-cta">{{i18n "dontHaveAnAccount"}} <a href="/sign-up">
-          {{i18n"signUp"}}</a></p>
-      </div>
     </div>
+    {{/if}}
+    {{> entryError}}
+    {{#unless otherLoginServices}}
+    <div class="email-option">
+      <h3>{{i18n "signIn"}}</h3>
+    </div>
+    {{/unless}}
+    {{#if passwordLoginService}}
+    <form class="entry-form ui form segment" id='signIn'>
+      <div class="field">
+        <div class="ui input">
+          <input autofocus name="email" type="{{emailInputType}}"
+                 value='{{email}}' placeholder="{{emailPlaceholder}}">
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui input">
+          <input name="password" type="password" value='{{password}}'
+                 placeholder="{{i18n 'password'}}">
+        </div>
+      </div>
+      {{#unless isUsernameOnly}}
+      <p class="entry-forgot-password"><a href="/forgot-password">
+        {{i18n "forgotPassword"}}</a>
+      </p>
+      <button type="submit" class="ui button">{{i18n "signIn"}}</button>
+      {{/unless}}
+    </form>
+    {{/if}}
+    <p class="entry-signup-cta">{{i18n "dontHaveAnAccount"}} <a href="/sign-up">
+      {{i18n"signUp"}}</a></p>
   </div>
 </template>
