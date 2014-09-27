@@ -1,4 +1,5 @@
 Package.describe({
+    name: 'joshowens:accounts-entry',
     summary: "Make signin and signout their own pages with routes.",
     version: '0.9.0',
     git: 'https://github.com/Differential/accounts-entry'
@@ -17,7 +18,7 @@ Package.onUse(function(api) {
     'handlebars',
     'session',
     'coffeescript',
-    'simple-form',
+    'joshowens:simple-form',
     'less',
     'sha']
   , 'client');
@@ -87,7 +88,7 @@ Package.onTest(function (api) {
             'templating',
             'mongo-livedata',
             'coffeescript',
-            'simple-form',
+            'joshowens:simple-form',
             'iron-router']);
   api.use('accounts-entry');
 
