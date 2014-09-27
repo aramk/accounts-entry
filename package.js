@@ -14,7 +14,9 @@ Package.on_use(function(api) {
     'handlebars',
     'session',
     'coffeescript',
-    'less']
+    'simple-form',
+    'less',
+    'sha']
   , 'client');
 
 
@@ -26,6 +28,8 @@ Package.on_use(function(api) {
     'client/views/signIn/signIn.coffee',
     'client/views/signUp/signUp.html',
     'client/views/signUp/signUp.coffee',
+    'client/views/signUp/extraSignUpFields.html',
+    'client/views/signUp/extraSignUpFields.coffee',
     'client/views/forgotPassword/forgotPassword.html',
     'client/views/forgotPassword/forgotPassword.coffee',
     'client/views/resetPassword/resetPassword.html',
@@ -35,11 +39,20 @@ Package.on_use(function(api) {
     'client/views/error/error.html',
     'client/views/error/error.coffee',
     'client/views/accountButtons/accountButtons.html',
-    'client/views/accountButtons/accountButtons.coffee',
     'client/views/accountButtons/_wrapLinks.html',
+    'client/views/accountButtons/signedIn.html',
+    'client/views/accountButtons/accountButtons.coffee',
     'client/t9n/english.coffee',
+    'client/t9n/french.coffee',
     'client/t9n/german.coffee',
-    'client/t9n/spanish.coffee'
+    'client/t9n/italian.coffee',
+    'client/t9n/polish.coffee',
+    'client/t9n/spanish.coffee',
+    'client/t9n/swedish.coffee',
+    'client/t9n/portuguese.coffee',
+    'client/t9n/slovene.coffee',
+    'client/t9n/russian.coffee',
+    'client/t9n/arabic.coffee'
   ], 'client');
 
   // SERVER
@@ -56,6 +69,7 @@ Package.on_use(function(api) {
 
   // CLIENT and SERVER
   api.imply('accounts-base', ['client', 'server']);
+  api.imply('accounts-password', ['client', 'server']);
   api.export('AccountsEntry', ['client', 'server']);
   api.use('iron-router', ['client', 'server']);
   api.use(['accounts-t9n'], ['client', 'server']);
@@ -65,13 +79,15 @@ Package.on_use(function(api) {
 
 Package.on_test(function (api) {
   api.use(['tinytest',
+            'underscore',
             'handlebars',
             'test-helpers',
             'templating',
             'mongo-livedata',
             'coffeescript',
-            'iron-router'])
-  api.use('accounts-entry')
+            'simple-form',
+            'iron-router']);
+  api.use('accounts-entry');
 
-  api.add_files(['tests/route.coffee', 'tests/client.html', 'tests/client.coffee'], 'client')
+  api.add_files(['tests/route.coffee', 'tests/client.html', 'tests/client.coffee'], 'client');
 })

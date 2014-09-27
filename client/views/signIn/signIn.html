@@ -35,8 +35,8 @@
         </div>
       </div>
       {{#unless isUsernameOnly}}
-      <p class="entry-forgot-password"><a href="/forgot-password">{{t9n "forgotPassword"}}</a></p>
-      <button type="submit" class="ui button blue submit">{{t9n "signIn"}}</button>
+      <p><a href="{{pathFor 'entryForgotPassword'}}">{{t9n "forgotPassword"}}</a></p>
+              <button type="submit" class="ui button submit">{{t9n "signIn"}}</button>
       {{/unless}}
       {{> entryError}}
     </form>

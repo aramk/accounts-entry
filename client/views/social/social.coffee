@@ -2,20 +2,30 @@
 Template.entrySocial.helpers
 
   buttonText: ->
-    Session.get('buttonText')
+    buttonText = Session.get('buttonText')
+    if buttonText == 'up'
+      t9n 'signUp'
+    else
+      t9n 'signIn'
 
   unconfigured: ->
-    Accounts.loginServiceConfiguration.find({service: @toString()}).fetch().length is 0
+    ServiceConfiguration.configurations.find({service: @toString()}).fetch().length is 0
 
   google: ->
     if @[0] == 'g' && @[1] == 'o'
       true
 
+  icon: ->
+    switch @.toString()
+      when 'google' then 'google-plus'
+      when 'meteor-developer' then 'rocket'
+      else @
+
 Template.entrySocial.events
 
   'click .btn': (event)->
     event.preventDefault()
-    serviceName = $(event.target).attr('id').split('-')[1]
+    serviceName = $(event.target).attr('id').replace 'entry-', ''
     callback = (err) ->
       if (!err)
         if Session.get('fromWhere')
@@ -29,13 +39,16 @@ Template.entrySocial.events
         Accounts._loginButtonsSession.configureService(serviceName)
       else
         Accounts._loginButtonsSession.errorMessage(err.reason || t9n("error.unknown"))
-    loginWithService = Meteor["loginWith" + capitalize(serviceName)]
+    if serviceName is 'meteor-developer'
+      loginWithService = Meteor["loginWithMeteorDeveloperAccount"]
+    else
+      loginWithService = Meteor["loginWith" + capitalize(serviceName)]
     options = {}
 
     if (Accounts.ui._options.requestPermissions[serviceName])
       options.requestPermissions = Accounts.ui._options.requestPermissions[serviceName]
 
-    if (Accounts.ui._options.requestOfflineToken[serviceName])
+    if (Accounts.ui._options.requestOfflineToken and Accounts.ui._options.requestOfflineToken[serviceName])
       options.requestOfflineToken = Accounts.ui._options.requestOfflineToken[serviceName]
 
     loginWithService(options, callback)
