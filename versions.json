@@ -141,8 +141,8 @@
       "1.0.6"
     ],
     [
-      "mrt:accounts-t9n",
-      "0.0.3"
+      "softwarerero:accounts-t9n",
+      "1.0.0"
     ],
     [
       "mrt:underscore-string-latest",
