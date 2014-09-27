@@ -1,4 +1,8 @@
-Template.entrySignUp.helpers
+AccountsEntry.hashPassword = (password) ->
+  digest: SHA256(password),
+  algorithm: "sha-256"
+
+AccountsEntry.entrySignUpHelpers = {
   showEmail: ->
     fields = AccountsEntry.settings.passwordSignupFields
 
@@ -42,8 +46,9 @@ Template.entrySignUp.helpers
 
   emailAddress: ->
     Session.get('email')
+}
 
-Template.entrySignUp.events
+AccountsEntry.entrySignUpEvents = {
   'submit #signUp': (event, t) ->
     event.preventDefault()
 
@@ -70,6 +75,9 @@ Template.entrySignUp.events
         undefined
     if AccountsEntry.settings.emailToLower and email then email = email.toLowerCase()
 
+    formValues = SimpleForm.processForm(event.target)
+    extraFields = _.pluck(AccountsEntry.settings.extraSignUpFields, 'field')
+    filteredExtraFields = _.pick(formValues, extraFields)
     password = t.find('input[type="password"]').value
 
     fields = AccountsEntry.settings.passwordSignupFields
@@ -79,11 +87,11 @@ Template.entrySignUp.events
       errMsg = []
       msg = false
       if password.length < 7
-        errMsg.push i18n("error.minChar")
+        errMsg.push t9n("error.minChar")
       if password.search(/[a-z]/i) < 0
-        errMsg.push i18n("error.pwOneLetter")
+        errMsg.push t9n("error.pwOneLetter")
       if password.search(/[0-9]/) < 0
-        errMsg.push i18n("error.pwOneDigit")
+        errMsg.push t9n("error.pwOneDigit")
 
       if errMsg.length > 0
         msg = ""
@@ -106,19 +114,19 @@ Template.entrySignUp.events
       'USERNAME_ONLY'], fields)
 
     if usernameRequired && username.length is 0
-      Session.set('entryError', i18n("error.usernameRequired"))
+      Session.set('entryError', t9n("error.usernameRequired"))
       return
 
     if username && AccountsEntry.isStringEmail(username)
-      Session.set('entryError', i18n("error.usernameIsEmail"))
+      Session.set('entryError', t9n("error.usernameIsEmail"))
       return
 
     if emailRequired && email.length is 0
-      Session.set('entryError', i18n("error.emailRequired"))
+      Session.set('entryError', t9n("error.emailRequired"))
       return
 
     if AccountsEntry.settings.showSignupCode && signupCode.length is 0
-      Session.set('entryError', i18n("error.signupCodeRequired"))
+      Session.set('entryError', t9n("error.signupCodeRequired"))
       return
 
 
@@ -127,10 +135,11 @@ Template.entrySignUp.events
         newUserData =
           username: username
           email: email
-          password: password
-          profile: AccountsEntry.settings.defaultProfile || {}
-        Accounts.createUser newUserData, (err, data) ->
+          password: AccountsEntry.hashPassword(password)
+          profile: filteredExtraFields
+        Meteor.call 'entryCreateUser', newUserData, (err, data) ->
           if err
+            console.log err
             T9NHelper.accountsError err
             return
           #login on client
@@ -140,6 +149,7 @@ Template.entrySignUp.events
           userCredential = if isEmailSignUp then email else username
           Meteor.loginWithPassword userCredential, password, (error) ->
             if error
+              console.log err
               T9NHelper.accountsError error
             else if Session.get 'fromWhere'
               Router.go Session.get('fromWhere')
@@ -148,5 +158,10 @@ Template.entrySignUp.events
               Router.go AccountsEntry.settings.dashboardRoute
       else
         console.log err
-        Session.set 'entryError', i18n("error.signupCodeIncorrect")
+        Session.set 'entryError', t9n("error.signupCodeIncorrect")
         return
+}
+
+Template.entrySignUp.helpers(AccountsEntry.entrySignUpHelpers)
+
+Template.entrySignUp.events(AccountsEntry.entrySignUpEvents)
