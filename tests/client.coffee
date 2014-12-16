@@ -1,13 +1,13 @@
 renderToDiv = (comp) ->
   div = document.createElement("DIV")
-  UI.materialize comp, div
+  Blaze.render(comp).attach(div)
   div
 
 Tinytest.add "Accounts Entry - {{accountButtons}} helper", (test) ->
   div = renderToDiv(Template.test_helper_account_buttons)
   html = canonicalizeHtml(div.innerHTML)
   test.include html, "Sign In"
-  test.include html, "Sign Up"
+  test.include html, "Register"
 
 Tinytest.add "Accounts Entry - wrapLinks setting on should wrap links in li elements", (test) ->
   AccountsEntry.settings.wrapLinks = true
@@ -41,3 +41,10 @@ Tinytest.add "Accounts Entry - forgot password link should not show up if userna
   html = canonicalizeHtml(div.innerHTML)
   scan = html.indexOf('<a href="/forgot-password">')
   test.equal(scan, -1, "Forgot password link should not show up if username only is set")
+
+Tinytest.add "Accounts Entry - adding extra fields to the layout", (test) ->
+  AccountsEntry.settings.extraSignUpFields = [{field: 'zipcode', required: true, type: 'number'}]
+  Package['accounts-password'] = true
+  div = renderToDiv(Template.test_helper_sign_up)
+  html = canonicalizeHtml(div.innerHTML)
+  test.include html, '<div class="form-group"><label for="zipcode">Zipcode</label><input class="form-control" id="zipcode" name="zipcode" required="" type="number" value=""></div>'

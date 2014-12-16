@@ -7,6 +7,8 @@ AccountsEntry =
     emailToLower: true
     usernameToLower: false
     entrySignUp: '/sign-up'
+    extraSignUpFields: []
+    showOtherLoginServices: true
 
   isStringEmail: (email) ->
     emailPattern = /^([\w.-]+)@([\w.-]+)\.([a-zA-Z.]{2,6})$/i
@@ -27,11 +29,13 @@ AccountsEntry =
   signInRequired: (router, extraCondition) ->
     extraCondition ?= true
     unless Meteor.loggingIn()
-      unless Meteor.user() and extraCondition
-        Session.set('fromWhere', router.path)
+      if Meteor.user() and extraCondition
+        router.next()
+      else
+        Session.set('fromWhere', router.url)
         Router.go('/sign-in')
-        Session.set('entryError', i18n('error.signInRequired'))
-        router.pause()
+        Session.set('entryError', t9n('error.signInRequired'))
+        router.next()
 
 @AccountsEntry = AccountsEntry
 
